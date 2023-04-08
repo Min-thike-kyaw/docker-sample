@@ -1,5 +1,9 @@
 version: '3'
 services:
+  docker-sample:
+    image: public.ecr.aws/c4s0t7n5/docker-sample:1.2
+    ports: 
+      - 3000:3000
   mongodb:
     image: mongo
     ports:
@@ -7,6 +11,8 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=admin
       - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-data:/data/db
   mongo-express:
     image: mongo-express
     restart: always # fixes MongoNetworkError when mongodb is not ready when mongo-express starts
@@ -16,4 +22,6 @@ services:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
       - ME_CONFIG_MONGODB_ADMINPASSWORD=password
       - ME_CONFIG_MONGODB_SERVER=mongodb
-
+volumes:
+  mongo-data:
+    driver: local
